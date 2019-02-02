@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<div *ngIf="mode == 'modify_bucket_amount'" id = "modiy_bucket_amount" class = "form">
+  <h4>Modify Bucket Amount</h4>
+  <form (ngSubmit)="modifyBucketTotal(modifyBucketAmountForm.value)" id = "modify_bucket_amount_form" #modifyBucketAmountForm = "ngForm">
+    <div>
+      <label for="bucket">Bucket:</label>
+      <select id = "bucket" name = "bucket" (change)="selectBucket($event)" ngModel required>
+        <option *ngFor = "let bucket of buckets" id = "{{ bucket.label }}_option" value = "{{ bucket.id }}">{{ bucket.label }} - {{ bucket.total | currency:'USD':true:'1.2-2' }}</option>
+      </select>
+    </div>
+    <div>
+      <label for="add_remove">Add/Remove:</label>
+      <select id = "add_remove" name = "add_remove" ngModel required>
+        <option id = "add" value = "add">Add</option>
+        <option id = "remove" value = "remove">Remove</option>
+      </select>
+    </div>
+    <div>
+      <label for="transfer_amount">Transfer Amount:</label>
+      <input type = "number" id = "transfer_amount" name = "transfer_amount" min = "0" [NumberMax] = "modifyBucketAmountForm.value.add_remove == 'remove' ? selectBucket.total : 1000000" ngModel required/>
+    </div>
+    <br/>
+    <button type="submit" [disabled]="!modifyBucketAmountForm.form.valid">Confirm</button>
+  </form>
+</div>

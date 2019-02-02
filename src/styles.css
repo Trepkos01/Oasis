@@ -1,0 +1,222 @@
+html{
+    background-color: rgb(16, 20, 43);
+    color:white;
+    font-family:sans-serif;
+  }
+  
+  h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 250%;
+    letter-spacing: 10px;
+  }
+  
+  h2{
+    font-size:150%;
+  }
+  
+  h3{
+    font-size:100%;
+  }
+  
+  h2,h3{
+    color: lightblue;
+    letter-spacing: 3px;
+  }
+  
+  ul{
+    padding:0;
+  }
+  
+  li{
+    display:block;
+  }
+  
+  input[type=text]{
+    border-radius: 2px;
+    margin-top:10px;
+    margin-bottom:10px;
+    display:block;
+  }
+  
+  input[type=number]{
+    border-radius: 2px;
+    margin-top:10px;
+    margin-bottom:10px;
+    display:block;
+  }
+  
+  select{
+    border-radius: 2px;
+    margin-top:10px;
+    margin-bottom:10px;
+    display:block;
+  }
+  
+  button{
+    background-color: darkgray;
+    border: white solid 1px;
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover{
+    background-color: lightblue;
+    border: white solid 1px;
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+    cursor: pointer;
+  }
+  
+  button:disabled{
+    background-color: lightgray;
+    border: white solid 1px;
+    color: darkgray;
+    font-weight: bold;
+    padding: 5px;
+    cursor: default;
+  }
+  
+  table{
+    border:white solid 1px;
+    table-layout: fixed;
+    width:100%;
+  }
+  
+  th{
+    text-align:center;
+    font-size:12px;
+    background-color:rgb(16, 20, 43);
+  }
+  
+  tr,tbody{
+    border-bottom: white 1px solid;
+    background-color: rgba(16, 20, 43, 0.38);
+  }
+  
+  td{
+    text-align: center;
+    font-size:12px;
+    border-left: white 1px solid;
+    border-right: white 1px solid;
+    padding:5px;
+  }
+  
+  a{
+    font-weight: bold;
+    color: lightblue;
+    text-decoration: none;
+  }
+  a:hover{
+    color: white;
+  }
+  
+  
+  .stats{
+      background-color: #6c7492;
+      padding:10px;
+      border: white solid 1px;
+      font-size:15px;
+  }
+  
+  .object_label{
+    color:lightblue;
+    font-weight:bold;
+  }
+  
+  .form{
+    padding:5px;
+  }
+  
+  .show_responsive{
+    display:none;
+  }
+  
+  .history_stats{
+    margin-bottom:25px;
+  }
+  
+  #bucket_details > table{
+    width:auto;
+  }
+  
+  #bucket_details td{
+    border:white 1px solid;
+    text-transform: capitalize;;
+  }
+  
+  #progress_by_months_container{
+    border: 1px white solid;
+    display:inline-block
+  }
+  
+  #control_panel{
+    text-align:center;
+  }
+  
+  #dashboard{
+    text-align: center;
+  }
+  
+  @media only screen and (max-width: 760px), (max-device-width: 1024px) and (min-device-width: 768px) {
+    table, thead, tbody, th, td, tr {
+          display: block;
+      }
+      thead tr {
+          position: absolute;
+          top: -9999px;
+          left: -9999px;
+      }
+    thead,th{
+      display:none;
+    }
+  
+      tr { border: 1px solid #ccc; }
+      td {
+          border: none;
+          border-bottom: 1px solid #eee;
+          position: relative;
+      }
+      td:before {
+          position: absolute;
+          top: 6px;
+          left: 6px;
+          width: 45%;
+          padding-right: 10px;
+          white-space: nowrap;
+      }
+  
+    button{
+      display:block;
+      margin-left:auto;
+      margin-right:auto;
+      margin-top:10px;
+      margin-bottom:10px;
+      width:100%
+    }
+  
+    #progress_by_months_button{
+      width:inherit;
+      display:inline-block;
+    }
+  
+    #progress_by_months_container{
+      width:100%
+    }
+  
+    .hide_responsive{
+      display:none;
+    }
+  
+    .show_responsive{
+      display:inherit;
+    }
+  
+    .alternate_color{
+      background-color:rgb(16, 20, 43);
+    }
+  
+  }
+  

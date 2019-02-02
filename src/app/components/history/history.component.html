@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<h1>History</h1>
+<hr/>
+<div *ngIf="ensembleService.history.length == 0" style = "text-align:center">
+  No History Yet!
+</div>
+<div *ngIf="ensembleService.history.length > 0" id = "history">
+  <div *ngFor="let monthProgress of ensembleService.history" id = "progress_month_{{ monthProgress.info.month }}" class = "stats history_stats">
+    <h2>Month <span class = "object_label"><b>{{ monthProgress.info.month }}</b></span>.</h2>
+    <h3>Streams</h3>
+    <table>
+          <colgroup><col width = "40%"><col width = "15%"><col width = "15%"><col width="15%"><col width="15%"></colgroup>
+          <thead><th>Info</th><th>Income Range</th><th>Current Month Total</th><th>Current Annual Total</th><th>Current Total</th></thead>
+          <tr *ngIf="monthProgress.streams.length == 0"><td colspan = "5" >No Streams</td></tr>
+          <tbody>
+            <tr *ngFor="let stream of monthProgress.streams; let i = index" [ngClass] = "i%2 == 0 ? 'alternate_color' : ''">
+              <td><span class = "show_responsive object_label">Info: </span><span id = "{{stream.label}}">{{stream.label}}</span></td>
+              <td><span class = "show_responsive object_label">Range: </span><span id = "{{stream.label}}">{{stream.lowerLimit | currency:'USD':true:'1.2-2'}} - {{ stream.upperLimit | currency:'USD':true:'1.2-2' }}</span></td>
+              <td><span class = "show_responsive object_label">Month Total: </span><span id = "{{stream.label}}_month_total">{{ stream.monthTotal | currency:'USD':true:'1.2-2'}}</span></td>
+              <td><span class = "show_responsive object_label">Annual Total: </span><span id = "{{stream.label}}_annual_total">{{ stream.annualTotal | currency:'USD':true:'1.2-2'}}</span></td>
+              <td><span class = "show_responsive object_label">Total: </span><span id = "{{stream.label}}_total">{{ stream.total | currency:'USD':true:'1.2-2'}}</span></td>
+            </tr>
+          </tbody>
+          <tr class = "hide_responsive"><th colspan="2">&nbsp;</th><th>Month Streams Total</th><th>Annual Streams Total</th><th>Streams Total</th></tr>
+          <tr>
+            <td class = "hide_responsive">&nbsp;</td>
+            <td class = "hide_responsive">&nbsp;</td>
+            <td><span class = "show_responsive object_label">Month Streams Total: </span>{{ monthProgress.info.totalStreamsMonth | currency:'USD':true:'1.2-2' }}</td>
+            <td><span class = "show_responsive object_label">Annual Streams Total: </span>{{ monthProgress.info.totalStreamsAnnual | currency:'USD':true:'1.2-2' }}</td>
+            <td><span class = "show_responsive object_label">Streams Total: </span>{{ monthProgress.info.totalStreams | currency:'USD':true:'1.2-2' }}</td>
+          </tr>
+          <tr class = "hide_responsive"><th colspan = '5'>&nbsp;</th></tr>
+          <tr>
+            <td><b>Unallocated Income:</b> </td><td colspan="4"> {{ monthProgress.info.unallocatedIncome | currency:'USD':true:'1.2-2' }} </td>
+          </tr>
+    </table>
+    <h3>Buckets</h3>
+    <h4>Gross</h4>
+    <table>
+      <thead><th>Info</th><th>Debt Balance</th><th>Month Returns Rate</th><th>Month Returns</th><th>Total Returns</th><th>Contribution (Of Gross)</th><th>Month Total</th><th>Annual Total</th><th>Current Total</th></thead>
+      <tr *ngIf="monthProgress.grossBuckets.length == 0"><td colspan = "9" >No Buckets</td></tr>
+      <tr *ngFor="let bucket of monthProgress.grossBuckets; let i = index;" [ngClass] = "i%2 == 0 ? 'alternate_color' : ''">
+        <td><span class = "show_responsive object_label">Info: </span><span id = "{{bucket.label}}">{{bucket.label}}</span></td>
+        <td><span class = "show_responsive object_label">Debt Balance: </span><span id = "{{bucket.label}}_debt_balance">{{bucket.debtBalance | currency:'USD':true:'1.2-2'}}</span></td>
+        <td><span class = "show_responsive object_label">Month Returns Rate: </span><span id = "{{bucket.label}}_returns_rate">{{bucket.investmentReturnPercentage}}%</span></td>
+        <td><span class = "show_responsive object_label">Month Returns: </span><span id = "{{bucket.label}}_month_returns">{{bucket.monthInvestmentReturn | currency:'USD':true:'1.2-2'}}</span></td>
+        <td><span class = "show_responsive object_label">Total Returns: </span><span id = "{{bucket.label}}_total_returns">{{bucket.returnsTotal | currency:'USD':true:'1.2-2'}}</span></td>
+        <td><span class = "show_responsive object_label">Contribution (Of Gross): </span><span id = "{{bucket.label}}_contribution">{{bucket.contribution}}%</span></td>
+        <td><span class = "show_responsive object_label">Month Total: </span><span id = "{{bucket.label}}_month_total"> {{bucket.monthTotal | currency:'USD':true:'1.2-2' }} </span></td>
+        <td><span class = "show_responsive object_label">Annual Total: </span><span id = "{{bucket.label}}_annual_total"> {{bucket.annualTotal | currency:'USD':true:'1.2-2' }} </span></td>
+        <td><span class = "show_responsive object_label">Total: </span><span id = "{{bucket.label}}_total"> {{bucket.total | currency:'USD':true:'1.2-2' }} </span></td>
+      </tr>
+      <tr class = "hide_responsive">
+          <th colspan="5">&nbsp;</th><th>Contribution Total</th><th>Month Total</th><th>Annual Total</th><th>Total</th>
+      </tr>
+      <tr>
+          <td colspan="5" class = "hide_responsive">&nbsp;</td>
+          <td><span class = "show_responsive object_label">Total Contribution Percentage: </span>{{ monthProgress.info.grossBucketsContributionPercentage }}%</td>
+          <td><span class = "show_responsive object_label">Total Gross Contributions Month: </span>{{ monthProgress.info.grossBucketsTotalMonth | currency:'USD':true:'1.2-2' }}</td>
+          <td><span class = "show_responsive object_label">Total Gross Contributions Annual: </span>{{ monthProgress.info.grossBucketsTotalAnnual | currency:'USD':true:'1.2-2' }}</td>
+          <td><span class = "show_responsive object_label">Total Gross Contributions: </span>{{ monthProgress.info.grossBucketsTotal | currency:'USD':true:'1.2-2' }}</td>
+      </tr>
+    </table>
+    <h4>Taxes</h4>
+    <table>
+      <thead><th>Info</th><th>Contribution (Of Taxable)</th><th>Month Total</th><th>Annual Total</th><th>Current Total</th></thead>
+      <tr *ngIf="monthProgress.taxBuckets.length == 0"><td colspan = "5" >No Buckets</td></tr>
+      <tr *ngFor="let bucket of monthProgress.taxBuckets; let i = index;" [ngClass] = "i%2 == 0 ? 'alternate_color' : ''">
+        <td><span id = "{{bucket.label}}"><span class = "show_responsive object_label">Info: </span>{{bucket.label}}</span></td>
+        <td><span id = "{{bucket.label}}_contribution"><span class = "show_responsive object_label">Contribution (Of Taxable): </span>{{bucket.contribution}}%</span></td>
+        <td><span id = "{{bucket.label}}_month_total"><span class = "show_responsive object_label">Month Total: </span>{{bucket.monthTotal | currency:'USD':true:'1.2-2' }} </span></td>
+        <td><span id = "{{bucket.label}}_annual_total"><span class = "show_responsive object_label">Annual Total: </span>{{bucket.annualTotal | currency:'USD':true:'1.2-2' }} </span></td>
+        <td><span id = "{{bucket.label}}_total"><span class = "show_responsive object_label">Current Total: </span>{{bucket.total | currency:'USD':true:'1.2-2' }} </span></td>
+      </tr>
+      <tr class = "hide_responsive">
+          <th>&nbsp;</th><th>Contribution Total</th><th>Month Total</th><th>Annual Total</th><th>Total</th>
+      </tr>
+      <tr>
+          <td class = "hide_responsive">&nbsp;</td>
+          <td><span class = "show_responsive object_label">Total Contribution Percentage: </span>{{ monthProgress.info.taxBucketsContributionPercentage }}%</td>
+          <td><span class = "show_responsive object_label">Total Tax Contributions Month: </span>{{ monthProgress.info.taxBucketsTotalMonth | currency:'USD':true:'1.2-2' }}</td>
+          <td><span class = "show_responsive object_label">Total Tax Contributions Annual: </span>{{ monthProgress.info.taxBucketsTotalAnnual | currency:'USD':true:'1.2-2' }}</td>
+          <td><span class = "show_responsive object_label">Total Tax Contributions: </span>{{ monthProgress.info.taxBucketsTotal | currency:'USD':true:'1.2-2' }}</td>
+      </tr>
+    </table>
+    <h4>Net</h4>
+    <table>
+      <thead><th>Info</th><th>Debt Balance</th><th>Month Returns Rate</th><th>Month Returns</th><th>Total Returns</th><th>Contribution (Of Net)</th><th>Month Total</th><th>Annual Total</th><th>Current Total</th></thead>
+      <tr *ngIf="monthProgress.netBuckets.length == 0"><td colspan = "11" >No Buckets</td></tr>
+      <tr *ngFor="let bucket of monthProgress.netBuckets; let i = index;" [ngClass] = "i%2 == 0 ? 'alternate_color' : ''">
+        <td><span class = "show_responsive object_label">Label: </span><span id = "{{bucket.label}}">{{bucket.label}}</span></td>
+        <td><span class = "show_responsive object_label">Debt Balance: </span><span id = "{{bucket.label}}_debt_balance">{{bucket.debtBalance | currency:'USD':true:'1.2-2'}}</span></td>
+        <td><span class = "show_responsive object_label">Month Returns Rate: </span><span id = "{{bucket.label}}_returns_rate">{{bucket.investmentReturnPercentage}}%</span></td>
+        <td><span class = "show_responsive object_label">Month Returns: </span><span id = "{{bucket.label}}_month_returns">{{bucket.monthInvestmentReturn | currency:'USD':true:'1.2-2'}}</span></td>
+        <td><span class = "show_responsive object_label">Total Returns: </span><span id = "{{bucket.label}}_total_returns">{{bucket.returnsTotal | currency:'USD':true:'1.2-2'}}</span></td>
+        <td><span class = "show_responsive object_label">Contribution (Of Net): </span><span id = "{{bucket.label}}_contribution">{{bucket.contribution}}%</span></td>
+        <td><span class = "show_responsive object_label">Month Total: </span><span id = "{{bucket.label}}_month_total"> {{bucket.monthTotal | currency:'USD':true:'1.2-2' }} </span></td>
+        <td><span class = "show_responsive object_label">Annual Total: </span><span id = "{{bucket.label}}_annual_total"> {{bucket.annualTotal | currency:'USD':true:'1.2-2' }} </span></td>
+        <td><span class = "show_responsive object_label">Total: </span><span id = "{{bucket.label}}_total"> {{bucket.total | currency:'USD':true:'1.2-2' }} </span></td>
+      </tr>
+      <tr class = "hide_responsive">
+          <th colspan="5">&nbsp;</th><th>Contribution Total</th><th>Month Total</th><th>Annual Total</th><th>Total</th>
+      </tr>
+      <tr>
+          <td colspan="5" class = "hide_responsive">&nbsp;</td>
+          <td><span class = "show_responsive object_label">Total Contribution Percentage: </span>{{ monthProgress.info.netBucketsContributionPercentage }}%</td>
+          <td><span class = "show_responsive object_label">Total Net Contributions Month: </span>{{ monthProgress.info.netBucketsTotalMonth | currency:'USD':true:'1.2-2' }}</td>
+          <td><span class = "show_responsive object_label">Total Net Contributions Annual: </span>{{ monthProgress.info.netBucketsTotalAnnual | currency:'USD':true:'1.2-2' }}</td>
+          <td><span class = "show_responsive object_label">Total Net Contributions: </span>{{ monthProgress.info.netBucketsTotal | currency:'USD':true:'1.2-2' }}</td>
+      </tr>
+    </table>
+    <h4>Across All Buckets</h4>
+    <table>
+      <thead><th>Debt Balance Month Total</th><th>Investment Returns Month Total</th><th>Investment Returns Total</th></thead>
+      <tr>
+        <td><span class = "show_responsive object_label">Debt Balance Total: </span>{{ monthProgress.info.debtBalanaceTotalMonth | currency:'USD':true:'1.2-2' }}</td>
+        <td><span class = "show_responsive object_label">Investment Returns Month Total: </span>{{ monthProgress.info.investmentReturnsTotalMonth | currency:'USD':true:'1.2-2' }}</td>
+        <td><span class = "show_responsive object_label">Investment Returns Total: </span>{{ monthProgress.info.investmentReturnsTotal | currency:'USD':true:'1.2-2' }}</td>
+      </tr>
+    </table>
+  </div>
+</div>

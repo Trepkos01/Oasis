@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<div *ngIf="mode == 'edit_bucket'" id = "edit_bucket" class = "form">
+  <form #editBucketForm="ngForm">
+    <div id = "bucket_details">
+      <h4>View Details for <span class = "object_label">{{ bucket.label }}</span></h4>
+      <table>
+        <tr><td><span class = "object_label">Bucket Label: </span></td><td>{{ bucket.label }}</td></tr>
+        <tr><td><span class = "object_label">Bucket Type:  </span></td><td> {{ bucket.type }}</td></tr>
+        <tr><td><span class = "object_label">Bucket Method: </span></td><td> {{ bucket.method }}</td></tr>
+        <tr><td><span class = "object_label">Contribution: </span></td><td> {{ bucket.contribution }}%</td></tr>
+        <tbody id = "spend_details" *ngIf="bucket.method == 'spend'">
+          <tr><td><span class = "object_label">Expense Type: </span></td><td> {{ bucket.expenseType }}</td></tr>
+          <tr><td><span class = "object_label">Debt Balance: </span></td><td> {{ bucket.debtBalance | currency:'USD':true:'1.2-2' }}</td></tr>
+          <tr><td><span class = "object_label">Debt Interest: </span></td><td> {{ bucket.debtInterestRate }}%</td></tr>
+        </tbody>
+        <tbody id = "save_details" *ngIf="bucket.method == 'save'">
+          <tr><td><span class = "object_label">Minimum Investment: </span></td><td> {{ bucket.investmentMin | currency:'USD':true:'1.2-2' }}</td></tr>
+          <tr><td><span class = "object_label">Investment Return (Lower Bound): </span></td><td> {{ bucket.investmentReturnLower }}%</td></tr>
+          <tr><td><span class = "object_label">Investment Return (Higher Bound): </span></td><td> {{ bucket.investmentReturnUpper }}%</td></tr>
+          <tr><td><span class = "object_label">Current Month's Investment Percentage: </span></td><td> {{ bucket.investmentReturnPercentage }}%</td></tr>
+          <tr><td><span class = "object_label">Current Month's Investment Returns: </span></td><td> {{ bucket.monthInvestmentReturn | currency:'USD':true:'1.2-2' }}</td></tr>
+          <tr><td><span class = "object_label">Annual Contribution Limit: </span></td><td> {{ bucket.annualContributionLimit | currency:'USD':true:'1.2-2' }}</td></tr>
+          <tr><td><span class = "object_label">Returns Total: </span></td><td> {{ bucket.returnsTotal | currency:'USD':true:'1.2-2' }}</td></tr>
+        </tbody>
+        <tr><td><span class = "object_label">Month Total: </span></td><td> {{ bucket.monthTotal | currency:'USD':true:'1.2-2' }}</td></tr>
+        <tr><td><span class = "object_label">Annual Total: </span></td><td> {{ bucket.annualTotal | currency:'USD':true:'1.2-2' }}</td></tr>
+        <tr><td><span class = "object_label">Total: </span></td><td> {{ bucket.total | currency:'USD':true:'1.2-2' }}</td></tr>
+    </table>
+    </div>
+    <hr/>
+    <div id = "bucket_details_inputs">
+      <h4>View Details for <span class = "object_label">{{ bucket.label }}</span></h4>
+      <div>
+        <label for="label">Bucket Label</label>
+        <input type="text" id="label" name = "label" [(ngModel)]="bucket.label" required>
+      </div>
+      <div>
+        <label for="contribution">Contribution (%)</label>
+        <input type="number" id="contribution" name = "contribution" [EnforceBounds]="bucket.type" [(ngModel)]="bucket.contribution" required>
+      </div>
+      <div *ngIf="bucket.method == 'save'">
+        <label for="investment_return_lower">Investment Return Lower Bound Percentage (%)</label>
+        <input type="number" id="investment_return_lower" name = "investment_return_lower" [(ngModel)]="bucket.investmentReturnLower" required>
+      </div>
+      <div *ngIf="bucket.method == 'save'">
+        <label for="investment_return_upper">Investment Return Upper Bound Percentage (%)</label>
+        <input type="number" id="investment_return_upper" name = "investment_return_upper" [(ngModel)]="bucket.investmentReturnUpper" required>
+      </div>
+      <div *ngIf="bucket.method == 'save'">
+        <label for="annual_contribution_limit">Annual Contribution Limit ($)</label>
+        <input type="number" id="annual_contribution_limit" name = "annual_contribution_limit" [(ngModel)]="bucket.annualContributionLimit" required>
+      </div>
+    </div>
+    <hr/>
+  </form>
+</div>
+<div *ngIf="mode == 'create_bucket'" id = "add_new_bucket_form" class = "form">
+  <h4>Create a New Bucket</h4>
+  <form (ngSubmit)="onCreate(createBucketForm.value)"  #createBucketForm="ngForm">
+    <div>
+      <label for="label">Bucket Label</label>
+      <input type="text" id="label" name = "label" ngModel required>
+    </div>
+    <div>
+      <label for="type">Bucket Type</label>
+      <select id = "type" name = "type" ngModel required>
+        <option id = "gross" value = "gross">Gross</option>
+        <option id = "taxes" value = "taxes">Taxes</option>
+        <option id = "net" value = "net">Net</option>
+      </select>
+    </div>
+    <div *ngIf="createBucketForm.value.type == 'gross' || createBucketForm.value.type == 'net'">
+      <label for="method">Bucket Method</label>
+      <select id = "method" name = "method" ngModel required>
+        <option id = "save" value = "save">Save</option>
+        <option id = "spend" value = "spend">Spend</option>
+      </select>
+    </div>
+    <div>
+      <label for="contribution">Contribution (%)</label>
+      <input type="number" id="contribution" name = "contribution" [EnforceBounds]="createBucketForm.value.type" ngModel required>
+    </div>
+    <div id = "saving_details" *ngIf="createBucketForm.value.method  == 'save'">
+      <div>
+        <label for="investment_minimum">Investment Minimum ($)</label>
+        <input type="number" id="investment_minimum" name = "investment_minimum" ngModel required>
+      </div>
+      <div>
+        <label for="investment_return_lower">Investment Return Lower Bound Percentage (%)</label>
+        <input type="number" id="investment_return_lower" name = "investment_return_lower" ngModel required>
+      </div>
+      <div>
+        <label for="investment_return_upper">Investment Return Upper Bound Percentage (%)</label>
+        <input type="number" id="investment_return_upper" name = "investment_return_upper" ngModel required>
+      </div>
+      <div>
+        <label for="annual_contribution_limit">Annual Contribution Limit ($)</label>
+        <input type="number" id="annual_contribution_limit" name = "annual_contribution_limit" ngModel required>
+      </div>
+    </div>
+    <div id = "spending_details" *ngIf="createBucketForm.value.method == 'spend'">
+      <div>
+        <label for="expense_type">Expense Type</label>
+        <select id = "expense_type" name = "expense_type" ngModel required>
+          <option id = "debt" value = "debt">Debt</option>
+          <option id = "recurring" value = "recurring">Recurring</option>
+        </select>
+      </div>
+      <div>
+        <label for="debt_balance">Debt Balance ($)</label>
+        <input type="number" id="debt_balance" name = "debt_balance" ngModel required>
+      </div>
+      <div>
+        <label for="debt_interest_rate">Debt Interest Rate (%)</label>
+        <input type="number" id="debt_interest_rate" name = "debt_interest_rate" ngModel required>
+      </div>
+    </div>
+    <br/>
+    <button type="submit" [disabled]="!createBucketForm.form.valid">Create New Bucket</button>
+  </form>
+</div>

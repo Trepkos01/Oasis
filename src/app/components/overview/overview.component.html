@@ -1,0 +1,155 @@
+<hr/>
+<div class = "stats">
+  <h2>Overview</h2>
+  Showing for month <span class = "object_label"><b>{{ generalInfo.month }}</b></span>.
+  <h3>My Streams</h3>
+  <table>
+        <colgroup><col width = "20%"><col width = "15%"><col width = "15%"><col width="15%"><col width="15%"><col width="20%"></colgroup>
+        <thead><th>Info</th><th>Income Range</th><th>Current Month Total</th><th>Current Annual Total</th><th>Current Total</th><th>&nbsp;</th></thead>
+        <tr *ngIf="streams.length == 0"><td colspan = "6" >No Streams</td></tr>
+        <tbody>
+          <tr *ngFor="let stream of streams; let i = index" [ngClass] = "i%2 == 0 ? 'alternate_color' : ''">
+            <td><span class = "show_responsive object_label">Info: </span><span id = "{{stream.label}}">{{stream.label}}</span></td>
+            <td><span class = "show_responsive object_label">Range: </span><span id = "{{stream.label}}">{{stream.lowerLimit | currency:'USD':'symbol':'1.2-2'}} - {{ stream.upperLimit | currency:'USD':'symbol':'1.2-2' }}</span></td>
+            <td><span class = "show_responsive object_label">Month Total: </span><span id = "{{stream.label}}_month_total">{{ stream.monthTotal | currency:'USD':'symbol':'1.2-2'}}</span></td>
+            <td><span class = "show_responsive object_label">Annual Total: </span><span id = "{{stream.label}}_annual_total">{{ stream.annualTotal | currency:'USD':'symbol':'1.2-2'}}</span></td>
+            <td><span class = "show_responsive object_label">Total: </span><span id = "{{stream.label}}_total">{{ stream.total | currency:'USD':'symbol':'1.2-2'}}</span></td>
+            <td><button (click)="viewStreamDetails(stream)">View/Edit</button></td>
+          </tr>
+        </tbody>
+        <tr class = "hide_responsive"><th colspan="2">&nbsp;</th><th>Month Streams Total</th><th>Annual Streams Total</th><th>Streams Total</th><th>&nbsp;</th></tr>
+        <tr>
+          <td class = "hide_responsive">&nbsp;</td>
+          <td class = "hide_responsive">&nbsp;</td>
+          <td><span class = "show_responsive object_label">Month Streams Total: </span>{{ generalInfo.totalStreamsMonth | currency:'USD':'symbol':'1.2-2' }}</td>
+          <td><span class = "show_responsive object_label">Annual Streams Total: </span>{{ generalInfo.totalStreamsAnnual | currency:'USD':'symbol':'1.2-2' }}</td>
+          <td><span class = "show_responsive object_label">Streams Total: </span>{{ generalInfo.totalStreams | currency:'USD':'symbol':'1.2-2' }}</td>
+          <td class = "hide_responsive">&nbsp;</td>
+        </tr>
+        <tr class = "hide_responsive"><th colspan = '6'>&nbsp;</th></tr>
+        <tr>
+          <td><b>Unallocated Income:</b> </td><td colspan="5"> {{ generalInfo.unallocatedIncome | currency:'USD':'symbol':'1.2-2' }} </td>
+        </tr>
+  </table>
+  <h3>My Buckets</h3>
+  <h4>Gross</h4>
+  <table>
+    <thead><th>&nbsp;</th><th>Info</th><th>Debt Balance</th><th>Month Returns Rate</th><th>Month Returns</th><th>Total Returns</th><th>Contribution (Of Gross)</th><th>Month Total</th><th>Annual Total</th><th>Current Total</th><th>&nbsp;</th></thead>
+    <tr *ngIf="grossBuckets.length == 0"><td colspan = "11" >No Buckets</td></tr>
+    <tr *ngFor="let bucket of grossBuckets; let i = index;" [ngClass] = "i%2 == 0 ? 'alternate_color' : ''">
+      <td>
+        <button (click)="moveBucket(i,-1,'gross')" [disabled]='i == 0'>&#8593;</button>
+        <button (click)="moveBucket(i,1,'gross')"  [disabled]='i == grossBuckets.length-1'>&#8595;</button>
+      </td>
+      <td><span class = "show_responsive object_label">Info: </span><span id = "{{bucket.label}}">{{bucket.label}}</span></td>
+      <td><span class = "show_responsive object_label">Debt Balance: </span><span id = "{{bucket.label}}_debt_balance">{{bucket.debtBalance | currency:'USD':'symbol':'1.2-2'}}</span></td>
+      <td><span class = "show_responsive object_label">Month Returns Rate: </span><span id = "{{bucket.label}}_returns_rate">{{bucket.investmentReturnPercentage}}%</span></td>
+      <td><span class = "show_responsive object_label">Month Returns: </span><span id = "{{bucket.label}}_month_returns">{{bucket.monthInvestmentReturn | currency:'USD':'symbol':'1.2-2'}}</span></td>
+      <td><span class = "show_responsive object_label">Total Returns: </span><span id = "{{bucket.label}}_total_returns">{{bucket.returnsTotal | currency:'USD':'symbol':'1.2-2'}}</span></td>
+      <td><span class = "show_responsive object_label">Contribution (Of Gross): </span><span id = "{{bucket.label}}_contribution">{{bucket.contribution}}%</span></td>
+      <td><span class = "show_responsive object_label">Month Total: </span><span id = "{{bucket.label}}_month_total"> {{bucket.monthTotal | currency:'USD':'symbol':'1.2-2' }} </span></td>
+      <td><span class = "show_responsive object_label">Annual Total: </span><span id = "{{bucket.label}}_annual_total"> {{bucket.annualTotal | currency:'USD':'symbol':'1.2-2' }} </span></td>
+      <td><span class = "show_responsive object_label">Total: </span><span id = "{{bucket.label}}_total"> {{bucket.total | currency:'USD':'symbol':'1.2-2' }} </span></td>
+      <td><button (click)="viewBucketDetails(bucket)">View/Edit</button></td>
+    </tr>
+    <tr class = "hide_responsive">
+        <th colspan="6">&nbsp;</th><th>Contribution Total</th><th>Month Total</th><th>Annual Total</th><th>Total</th><th>&nbsp;</th>
+    </tr>
+    <tr>
+        <td colspan="6" class = "hide_responsive">&nbsp;</td>
+        <td><span class = "show_responsive object_label">Total Contribution Percentage: </span>{{ generalInfo.grossBucketsContributionPercentage }}%</td>
+        <td><span class = "show_responsive object_label">Total Gross Contributions Month: </span>{{ generalInfo.grossBucketsTotalMonth | currency:'USD':'symbol':'1.2-2' }}</td>
+        <td><span class = "show_responsive object_label">Total Gross Contributions Annual: </span>{{ generalInfo.grossBucketsTotalAnnual | currency:'USD':'symbol':'1.2-2' }}</td>
+        <td><span class = "show_responsive object_label">Total Gross Contributions: </span>{{ generalInfo.grossBucketsTotal | currency:'USD':'symbol':'1.2-2' }}</td>
+        <td class = "hide_responsive">&nbsp;</td>
+    </tr>
+  </table>
+  <h4>Taxes</h4>
+  <table>
+    <thead><th>&nbsp;</th><th>Info</th><th>Contribution (Of Taxable)</th><th>Month Total</th><th>Annual Total</th><th>Current Total</th><th>&nbsp;</th></thead>
+    <tr *ngIf="taxBuckets.length == 0"><td colspan = "7" >No Buckets</td></tr>
+    <tr *ngFor="let bucket of taxBuckets; let i = index;" [ngClass] = "i%2 == 0 ? 'alternate_color' : ''">
+      <td>
+        <button (click)="moveBucket(i,-1,'gross')" [disabled]='i == 0'>&#8593;</button>
+        <button (click)="moveBucket(i,1,'gross')"  [disabled]='i == taxBuckets.length-1'>&#8595;</button>
+      </td>
+      <td><span id = "{{bucket.label}}"><span class = "show_responsive object_label">Info: </span>{{bucket.label}}</span></td>
+      <td><span id = "{{bucket.label}}_contribution"><span class = "show_responsive object_label">Contribution (Of Taxable): </span>{{bucket.contribution}}%</span></td>
+      <td><span id = "{{bucket.label}}_month_total"><span class = "show_responsive object_label">Month Total: </span>{{bucket.monthTotal | currency:'USD':'symbol':'1.2-2' }} </span></td>
+      <td><span id = "{{bucket.label}}_annual_total"><span class = "show_responsive object_label">Annual Total: </span>{{bucket.annualTotal | currency:'USD':'symbol':'1.2-2' }} </span></td>
+      <td><span id = "{{bucket.label}}_total"><span class = "show_responsive object_label">Current Total: </span>{{bucket.total | currency:'USD':'symbol':'1.2-2' }} </span></td>
+      <td><button (click)="viewBucketDetails(bucket)">View/Edit</button></td>
+    </tr>
+    <tr class = "hide_responsive">
+        <th colspan="2">&nbsp;</th><th>Contribution Total</th><th>Month Total</th><th>Annual Total</th><th>Total</th><th>&nbsp;</th>
+    </tr>
+    <tr>
+        <td colspan="2" class = "hide_responsive">&nbsp;</td>
+        <td><span class = "show_responsive object_label">Total Contribution Percentage: </span>{{ generalInfo.taxBucketsContributionPercentage }}%</td>
+        <td><span class = "show_responsive object_label">Total Tax Contributions Month: </span>{{ generalInfo.taxBucketsTotalMonth | currency:'USD':'symbol':'1.2-2' }}</td>
+        <td><span class = "show_responsive object_label">Total Tax Contributions Annual: </span>{{ generalInfo.taxBucketsTotalAnnual | currency:'USD':'symbol':'1.2-2' }}</td>
+        <td><span class = "show_responsive object_label">Total Tax Contributions: </span>{{ generalInfo.taxBucketsTotal | currency:'USD':'symbol':'1.2-2' }}</td>
+        <td class = "hide_responsive">&nbsp;</td>
+    </tr>
+  </table>
+  <h4>Net</h4>
+  <table>
+    <thead><th>&nbsp;</th><th>Info</th><th>Debt Balance</th><th>Month Returns Rate</th><th>Month Returns</th><th>Total Returns</th><th>Contribution (Of Net)</th><th>Month Total</th><th>Annual Total</th><th>Current Total</th><th>&nbsp;</th></thead>
+    <tr *ngIf="netBuckets.length == 0"><td colspan = "11" >No Buckets</td></tr>
+    <tr *ngFor="let bucket of netBuckets; let i = index;" [ngClass] = "i%2 == 0 ? 'alternate_color' : ''">
+      <td>
+        <button (click)="moveBucket(i,-1,'gross')" [disabled]='i == 0'>&#8593;</button>
+        <button (click)="moveBucket(i,1,'gross')"  [disabled]='i == netBuckets.length-1'>&#8595;</button>
+      </td>
+      <td><span class = "show_responsive object_label">Label: </span><span id = "{{bucket.label}}">{{bucket.label}}</span></td>
+      <td><span class = "show_responsive object_label">Debt Balance: </span><span id = "{{bucket.label}}_debt_balance">{{bucket.debtBalance | currency:'USD':'symbol':'1.2-2'}}</span></td>
+      <td><span class = "show_responsive object_label">Month Returns Rate: </span><span id = "{{bucket.label}}_returns_rate">{{bucket.investmentReturnPercentage}}%</span></td>
+      <td><span class = "show_responsive object_label">Month Returns: </span><span id = "{{bucket.label}}_month_returns">{{bucket.monthInvestmentReturn | currency:'USD':'symbol':'1.2-2'}}</span></td>
+      <td><span class = "show_responsive object_label">Total Returns: </span><span id = "{{bucket.label}}_total_returns">{{bucket.returnsTotal | currency:'USD':'symbol':'1.2-2'}}</span></td>
+      <td><span class = "show_responsive object_label">Contribution (Of Net): </span><span id = "{{bucket.label}}_contribution">{{bucket.contribution}}%</span></td>
+      <td><span class = "show_responsive object_label">Month Total: </span><span id = "{{bucket.label}}_month_total"> {{bucket.monthTotal | currency:'USD':'symbol':'1.2-2' }} </span></td>
+      <td><span class = "show_responsive object_label">Annual Total: </span><span id = "{{bucket.label}}_annual_total"> {{bucket.annualTotal | currency:'USD':'symbol':'1.2-2' }} </span></td>
+      <td><span class = "show_responsive object_label">Total: </span><span id = "{{bucket.label}}_total"> {{bucket.total | currency:'USD':'symbol':'1.2-2' }} </span></td>
+      <td><button (click)="viewBucketDetails(bucket)">View/Edit</button></td>
+    </tr>
+    <tr class = "hide_responsive">
+        <th colspan="6">&nbsp;</th><th>Contribution Total</th><th>Month Total</th><th>Annual Total</th><th>Total</th><th>&nbsp;</th>
+    </tr>
+    <tr>
+        <td colspan="6" class = "hide_responsive">&nbsp;</td>
+        <td><span class = "show_responsive object_label">Total Contribution Percentage: </span>{{ generalInfo.netBucketsContributionPercentage }}%</td>
+        <td><span class = "show_responsive object_label">Total Net Contributions Month: </span>{{ generalInfo.netBucketsTotalMonth | currency:'USD':'symbol':'1.2-2' }}</td>
+        <td><span class = "show_responsive object_label">Total Net Contributions Annual: </span>{{ generalInfo.netBucketsTotalAnnual | currency:'USD':'symbol':'1.2-2' }}</td>
+        <td><span class = "show_responsive object_label">Total Net Contributions: </span>{{ generalInfo.netBucketsTotal | currency:'USD':'symbol':'1.2-2' }}</td>
+        <td class = "hide_responsive">&nbsp;</td>
+    </tr>
+  </table>
+  <h4>Across All Buckets</h4>
+  <table>
+    <thead><th>Debt Balance Month Total</th><th>Investment Returns Month Total</th><th>Investment Returns Total</th></thead>
+    <tr>
+      <td><span class = "show_responsive object_label">Debt Balance Total: </span>{{ generalInfo.debtBalanaceTotalMonth | currency:'USD':'symbol':'1.2-2' }}</td>
+      <td><span class = "show_responsive object_label">Investment Returns Month Total: </span>{{ generalInfo.investmentReturnsTotalMonth | currency:'USD':'symbol':'1.2-2' }}</td>
+      <td><span class = "show_responsive object_label">Investment Returns Total: </span>{{ generalInfo.investmentReturnsTotal | currency:'USD':'symbol':'1.2-2' }}</td>
+    </tr>
+  </table>
+</div>
+<hr/>
+<div id = "control_panel">
+  <button (click)="createNewStream()">Create New Stream</button>
+  <button (click)="createNewBucket()">Create New Bucket</button>
+  <button (click)="bucketTransfers()">Bucket Transfers</button>
+  <button (click)="modifyBucketAmount()">Adjust Bucket Amounts</button>
+  <button (click)="progress(1)">Progress By One Month</button>
+  <button (click)="progress(12)">Progress By One Year</button>
+  <div style = "" id = "progress_by_months_container">
+    <form #formProgress="ngForm">
+      <button type="submit" (click)="progress(formProgress.value.progress_months)" style = "margin-left:10px;" [disabled]="!formProgress.form.valid" id = "progress_by_months_button">Progress By: </button><input id = "progress_months" name = "progress_months" type = "number" min = "0" max = "100" value = "1" style = "display:inline-block; margin-left:10px;" ngModel required/><span style = "padding:10px">months.</span>
+    </form>
+  </div>
+</div>
+<hr/>
+<bucket-detail [bucket]="selectedBucket" [mode]="mode" (modechangenotification)="onModeChange($event)"></bucket-detail>
+<stream-detail [stream]="selectedStream" [mode]="mode" (modechangenotification)="onModeChange($event)"></stream-detail>
+<bucket-transfers [mode]="mode"></bucket-transfers>
+<modify-bucket-amount [mode]="mode"></modify-bucket-amount>
